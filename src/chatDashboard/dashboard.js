@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../chatDashboard/dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faLink, faShare } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import { messageRoute } from "../utils/api";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-const socket = io("http://localhost:8080");
+const socket = io("https://my-ways-api.vercel.app");
 
 function Dashboard() {
   const { _id: senderId } = JSON.parse(
@@ -56,11 +54,6 @@ function Dashboard() {
               {msg.message}
             </p>
           ))}
-          {/* {sendMessage.map((msg, index) => (
-            <p key={index} className="send-message">
-              {msg.message}
-            </p>
-          ))} */}
         </div>
         <div className="chattype">
           <FontAwesomeIcon icon={faLink} style={{ marginLeft: "5px" }} />
