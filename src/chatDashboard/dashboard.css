@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    margin: 10px 10px 10px 10px;
+}
+
+.left {
+    background-color: lightgray;
+    width: 35rem;
+    height: 36rem;
+}
+
+.right {
+    background-color: rgb(190, 187, 187);
+    width: 43rem;
+    height: 36rem;
+}
+.header{
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.camicon{
+    margin-top: -45px;
+    margin-left:27rem ;
+   right: 0;
+}
+.chattype{
+    left: 0;
+    margin-top: 29rem;
+}
+.chatinput{
+    margin-left: 15px;
+    padding: 2px;
+    height: 2rem;
+    width: 28rem;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between; 
+  }
+  
+  .col {
+    flex: 1;
+    margin-top: 60px;
+  }
+  
