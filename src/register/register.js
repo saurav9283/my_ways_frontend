@@ -24,31 +24,26 @@ function Register() {
       });
 
       if (data.status === false) {
-        alert(data.msg)
+        alert(data.msg);
       }
       if (data.status === true) {
         localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
+          "chat-app-user",
           JSON.stringify(data.user)
         );
-        navigate("/")
       }
+      navigate("/chat");
     }
   };
 
   const handelValidation = () => {
     const { password, conformpassword, username, email } = value;
     if (password !== conformpassword) {
-        alert("Password and confirm password should be the same.")
+      alert("Password and confirm password should be the same.");
       return false;
-    } else if (username.length < 3) {
-      alert("Username should be greater than 3 characters.")
-      return false;
-    } else if (password.length < 8) {
-      alert("Password should be equal or greater than 8 characters.")
-      return false;
-    } else if (email === "") {
-        alert("Email is required.")
+    }
+     else if (email === "") {
+      alert("Email is required.");
       return false;
     }
     return true;
@@ -93,7 +88,7 @@ function Register() {
           <button type="submit">Create User</button>
 
           <span>
-            Already have an account? <Link to="/login">Login</Link>
+            Already have an account? <Link to="/">Login</Link>
           </span>
         </form>
       </div>

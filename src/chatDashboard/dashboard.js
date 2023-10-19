@@ -5,9 +5,11 @@ import { faCamera, faLink, faShare } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { messageRoute } from "../utils/api";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 const socket = io("http://localhost:3000");
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [allMessages, setAllMessages] = useState([]);
   const [sendMessage, setSendMessage] = useState([]);
@@ -17,6 +19,12 @@ function Dashboard() {
       setAllMessages((prevMessages) => [...prevMessages, message]);
     });
   }, []);
+
+  useEffect(()=>{
+    if (!localStorage.getItem("chat-app-user")) {
+      navigate("/");
+    }
+  },[])
 
   const handleMessage = async () => {
     try {

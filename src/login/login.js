@@ -13,7 +13,7 @@ function Login() {
 
   useEffect(() => {
     if (localStorage.getItem("chat-app-user")) {
-      navigate("/");
+      navigate("/chat");
     }
   }, [navigate]); // Added navigate as a dependency
 
@@ -39,7 +39,7 @@ function Login() {
             alert(data.msg)
         } else {
           localStorage.setItem("chat-app-user", JSON.stringify(data));
-          navigate("/");
+          navigate("/chat");
         }
       } catch (err) {
         console.log(err.message);
