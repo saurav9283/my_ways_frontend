@@ -29,7 +29,7 @@ function Register() {
       if (data.status === true) {
         localStorage.setItem(
           "chat-app-user",
-          JSON.stringify(data.user)
+          JSON.stringify(data)
         );
       }
       navigate("/chat");

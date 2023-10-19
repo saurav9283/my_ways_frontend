@@ -6,39 +6,37 @@ import axios from "axios";
 import { messageRoute } from "../utils/api";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-const socket = io("http://localhost:3000");
+const socket = io("http://localhost:8080");
 
 function Dashboard() {
+  const { _id: senderId } = JSON.parse(
+    localStorage.getItem("chat-app-user")
+  ).user;
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-  const [allMessages, setAllMessages] = useState([]);
-  const [sendMessage, setSendMessage] = useState([]);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    socket.on("chat message", (message) => {
-      setAllMessages((prevMessages) => [...prevMessages, message]);
-    });
-  }, []);
-
-  useEffect(()=>{
     if (!localStorage.getItem("chat-app-user")) {
       navigate("/");
     }
-  },[])
+  }, []);
 
-  const handleMessage = async () => {
-    try {
-      const response = await axios.post(messageRoute, { message });
-      if (response.status === 200) {
-        setSendMessage((prevSendMessages) => [...prevSendMessages, message]);
-        setMessage("");
-      } else {
-        alert("Error sending the message.");
-      }
-    } catch (error) {
-      alert("Message is required");
-    }
+  const handleMessage = () => {
+    const userMessage = { senderId, message };
+    socket.emit("user-message", userMessage);
+    setMessage("");
   };
+  useEffect(() => {
+    socket.on("message", (message) => {
+      console.log(message);
+      setMessages((messages) => [...messages, message]);
+    });
+
+    return () => {
+      socket.off("message");
+    };
+  }, []);
 
   const handleInputChange = (event) => {
     setMessage(event.target.value);
@@ -52,15 +50,17 @@ function Dashboard() {
           <FontAwesomeIcon icon={faCamera} className="camicon" />
         </div>
         <hr style={{ backgroundColor: "black", marginTop: "20px" }} />
-        <div className="chatField">
-          {allMessages.map((msg, index) => (
-            <p key={index}>{msg}</p>
-          ))}
-          {sendMessage.map((msg, index) => (
-            <p key={index} className="send-message">
-              {msg}
+        <div className="chatbody">
+          {messages.map((msg, index) => (
+            <p key={index} className={senderId === msg.senderId ? "rt" : "lf"}>
+              {msg.message}
             </p>
           ))}
+          {/* {sendMessage.map((msg, index) => (
+            <p key={index} className="send-message">
+              {msg.message}
+            </p>
+          ))} */}
         </div>
         <div className="chattype">
           <FontAwesomeIcon icon={faLink} style={{ marginLeft: "5px" }} />
