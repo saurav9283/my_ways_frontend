@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import "../chatDashboard/dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera, faLink, faShare } from "@fortawesome/free-solid-svg-icons";
+import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
+const socket = io("https://my-ways-api.vercel.app");
 
 function Dashboard() {
-  const { _id: senderId } = JSON.parse(localStorage.getItem("chat-app-user")).user;
+  const { _id: senderId } = JSON.parse(
+    localStorage.getItem("chat-app-user")
+  ).user;
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
-  const [allmessages, setAllMessages] = useState([]); // Changed to an array
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     if (!localStorage.getItem("chat-app-user")) {
@@ -17,10 +21,20 @@ function Dashboard() {
   }, []);
 
   const handleMessage = () => {
-    // Append the new message to the allmessages array
-    setAllMessages([...allmessages, { senderId, message }]);
+    const userMessage = { senderId, message };
+    socket.emit("user-message", userMessage);
     setMessage("");
   };
+  useEffect(() => {
+    socket.on("message", (message) => {
+      console.log(message);
+      setMessages((messages) => [...messages, message]);
+    });
+
+    return () => {
+      socket.off("message");
+    };
+  }, []);
 
   const handleInputChange = (event) => {
     setMessage(event.target.value);
@@ -35,7 +49,7 @@ function Dashboard() {
         </div>
         <hr style={{ backgroundColor: "black", marginTop: "20px" }} />
         <div className="chatbody">
-          {allmessages.map((msg, index) => (
+          {messages.map((msg, index) => (
             <p key={index} className={senderId === msg.senderId ? "rt" : "lf"}>
               {msg.message}
             </p>

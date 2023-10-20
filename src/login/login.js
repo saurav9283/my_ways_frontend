@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../register/register.css";
 import axios from "axios";
-import { loginRoute } from "../utils/api.js"
 
+import { loginRoute } from "../utils/api.js"
 function Login() {
   const navigate = useNavigate();
   const [value, setValue] = useState({
@@ -19,12 +19,18 @@ function Login() {
 
   const handleValidation = () => {
     const { password, username } = value;
-    if (password === "" || username === "") { // Fixed condition for username
-        alert("Username and Password are required")
+    if (password === "" || username === "") {
+      if (username === "") {
+        alert("Username is required");
+      }
+      if (password === "") {
+        alert("Password is required");
+      }
       return false;
     }
     return true;
   };
+  
 
   const handleSubmit = async (event) => { // Renamed handelSubmit to handleSubmit
     event.preventDefault();
@@ -35,6 +41,7 @@ function Login() {
           username,
           password,
         });
+        alert(data , status)
         if (status === 200 && data.status === false) { // Added status check
             alert(data.msg)
         } else {
@@ -49,6 +56,7 @@ function Login() {
 
   const handleChange = (event) => { // Renamed handelChange to handleChange
     setValue({ ...value, [event.target.name]: event.target.value });
+    console.log(value);
   };
 
   return (
